@@ -7,10 +7,37 @@
 <script src="js/waterfall.js"></script>
 <script type="text/javascript">
   window.onload=function(){
-    waterFall("main","aa");
-    window.onresize=function(){
-      waterFall("main","aa");
-    }
+    waterFall("main","aa",{method:"waterFall.php"},function(data,parent){
+      console.log(data);
+      //图片块的HTML模板
+      var moban='<div class="img"><a href=""><img src="images/{{img_src}}" /><div class="hover"></div></a>'+
+                       '<div class="aaleft"><img src="images/{{aaleft_img}}" /></div></div>'+
+              '<div class="title"><span>{{title_txt}}</span></div>'+
+              '<div class="dynamic">'+
+                '<div class="headpic"><img src="images/{{headpic}}" /></div>'+
+              '<div class="dynamictext"><p><span class="sc">{{person}}</span><span>发布到</span>'+
+              '<span class="sc">{{release}}</span></p><p class="time">（{{time}}）</p></div></div>'+
+            ' <div class="action">'+
+              '<p><span>{{like}} 喜欢</span><span>丨</span><span>{{collection}} 采集</span>'+
+              '<span>丨</span><span>{{comment}} 评论</span></p></div>';
+      for(var i=0;i<data.data.length;i++){
+          var odiv=document.createElement("div");
+          odiv.className="aa";
+          var newdiv=moban.replace(/{{img_src}}/,data.data[i].img)
+                .replace(/{{aaleft_img}}/,data.data[i].aaleft)
+                .replace(/{{title_txt}}/,data.data[i].title)
+                .replace(/{{headpic}}/,data.data[i].headpic)
+                .replace(/{{person}}/,data.data[i].person)
+                .replace(/{{release}}/,data.data[i].release)
+                .replace(/{{time}}/,data.data[i].time)
+                .replace(/{{like}}/,data.data[i].like)
+                .replace(/{{collection}}/,data.data[i].collection)
+                .replace(/{{comment}}/,data.data[i].comment);
+          odiv.innerHTML=newdiv;
+          parent.appendChild(odiv);
+        }
+    });
+
   }
 </script>
 </head>
