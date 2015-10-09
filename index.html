@@ -7,8 +7,8 @@
 <script src="js/waterfall.js"></script>
 <script type="text/javascript">
   window.onload=function(){
-    waterFall("main","aa",{method:"waterFall.php"},function(data,parent){
-      console.log(data);
+    document.documentElement.scrollTop=0;   //加载时重置滚动高度
+    waterFall("main","aa",{method:"waterFall.php",dropDegree:"center",loadingId:"waterfall_loading"},function(data,parent){
       //图片块的HTML模板
       var moban='<div class="img"><a href=""><img src="images/{{img_src}}" /><div class="hover"></div></a>'+
                        '<div class="aaleft"><img src="images/{{aaleft_img}}" /></div></div>'+
@@ -260,6 +260,11 @@
         <p><span>10 喜欢</span><span>丨</span><span>30 采集</span><span>丨</span><span>50 评论</span></p>
       </div>
    </div>
+  </div>
+
+  <div id="waterfall_loading"style="margin:0 auto; margin-top:30px;border-top:1px double #fff;text-align:center;background-color:#000;padding:15px 0;">
+    <img src="AWTet_01.gif" style="margin-right:6px;">
+    <span style="font-size:20px;font-weight:bold;color:#eee">加载中。。</span>
   </div>
 </div>
 
