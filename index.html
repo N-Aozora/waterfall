@@ -8,7 +8,7 @@
 <script type="text/javascript">
   window.onload=function(){
     document.documentElement.scrollTop=0;   //加载时重置滚动高度
-    waterFall("main","aa",{method:"waterFall.php",dropDegree:"center",loadingId:"waterfall_loading"},function(data,parent){
+    waterFall("main","aa",{method:"waterFall.php",dropDegree:"center",loadingId:"waterfall_loading",ajaxPOST:{title:"test"}},function(data,parent){
       //图片块的HTML模板
       var moban='<div class="img"><a href=""><img src="images/{{img_src}}" /><div class="hover"></div></a>'+
                        '<div class="aaleft"><img src="images/{{aaleft_img}}" /></div></div>'+

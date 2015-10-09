@@ -7,6 +7,8 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 	var margin=10;			//数据块之间的间距
 	var parentMargin=20;	//父元素的最小左右间距
 	var dropDegree="center";//加载新数据的下拉程度
+	var method=null;		//后台地址
+	var ajaxPOST=null;		//ajax POST方法传递给后台的内容
 
 	var wArr=[];			//储存第一行的left值
 	var hArr=[];			//储存当前行的距离父元素顶部的高度
@@ -34,7 +36,18 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 			dropDegree=setting.dropDegree;
 		}
 		if(typeof setting.loadingId=="string"){
-			showload=document.getElementById(setting.loadingId)
+			showload=document.getElementById(setting.loadingId);
+		}
+		if(typeof setting.method=="string"){
+			method=setting.method;
+		}
+		if(setting.ajaxPOST){
+			ajaxPOST=(typeof setting.ajaxPOST=="object")?JSON.stringify(setting.ajaxPOST):setting.ajaxPOST;
+		}
+		if(maxColumns<minColumns){
+			var _v=maxColumns;
+			maxColumns=minColumns;
+			minColumns=_v;
 		}
 	}
 
@@ -86,7 +99,7 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 
 	//下拉加载图片
 	function addposition(){
-		if(!isRepeatScrol) return;
+		if(!isRepeatScrol||!method) return;
 		var childs=getbycls(oparent,childscls);
 		var topHeight=document.documentElement.scrollTop||document.body.scrollTop;	//滚动高度
 		var lastHeight=Math.max.apply(null,hArr)-margin;	//最后一个图片块的列高度
@@ -105,7 +118,7 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 			showload.style.display="block";
 			var time1=new Date();
 			var xmlhttp=window.XMLHttpRequest?new XMLHttpRequest:new ActiveXObject("Microsoft.XMLHTTP");
-			xmlhttp.open("POST",setting.method,true);
+			xmlhttp.open("POST",method,true);
 			xmlhttp.onreadystatechange=function(){
 				if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
 					var _length=childs.length;								//保存加载前的图片块的数量
@@ -124,7 +137,7 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 					isRepeatScrol=true;
 				}
 			}
-			xmlhttp.send(JSON.stringify({title:"test"}));
+			xmlhttp.send(ajaxPOST);
 		}	
 	}
 
