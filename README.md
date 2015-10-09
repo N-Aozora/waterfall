@@ -10,7 +10,7 @@
   <b>margin:</b> 10, //图片块间距，number<br>
   <b>parentMargin:</b> 20, //父容器两侧最小间距，number<br>
   <b>dropDegree:</b> "center", //触发加载时的下拉程度，center下拉到最后一个高度的一半时加载，top顶部时加载，bottom底部时加载，string<br>
-  <b>loadingId:</b> false, //是否显示加载状态（loading..）,需自行添加html和css并设置为id名，string<br>
+  <b>loadingId:</b> false, //鸡肋功能..是否显示加载状态（loading..）,需自行添加html和css并设置为id名，string<br>
   <b>method:</b> null  //获取数据的后台地址，string<br>
   <b>ajaxPOST:</b> null  //ajax POST方法传递给后台地址的内容，string<br>
 <b>}</b><br>
