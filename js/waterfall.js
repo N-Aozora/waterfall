@@ -74,27 +74,42 @@ function waterFall(parent,childscls,setting,ajaxcallbak){
 		columns=(columns<minColumns)?minColumns:(columns>maxColumns)?maxColumns:columns;	//限制列数不能超过最大值或者最小值
 		
 		//计算所有图片块的定位
-		for(var i=0;i<childs.length;i++){
-			//设置第一行的left值，并保存在wArr中，将对应列的高度保存在hArr中
-			if(i<columns){
-				var left=i*(margin+w);
-				var top=0;
-				childs[i].style.left=left+"px";
-				childs[i].style.top=top+"px";
-				wArr.push(left);
-				hArr.push(top+margin+childs[i].offsetHeight);
-			}else{
-				var minTop=Math.min.apply(null,hArr);			//取出最小的列高度
-				var index=minIndex(minTop);						//匹配最小列高度所在列数
-				childs[i].style.left=wArr[index]+"px";			//根据所在列对齐第一行
-				childs[i].style.top=hArr[index]+"px"; 			//当前图片块紧接着上一行的最小列高度之后
-				hArr[index]+=childs[i].offsetHeight+margin;		//更新当前列的列高度
+		!function calculation(){
+			for(var i=0;i<childs.length;i++){
+				//设置第一行的left值，并保存在wArr中，将对应列的高度保存在hArr中
+				if(i<columns){
+					var left=i*(margin+w);
+					var top=0;
+					childs[i].style.left=left+"px";
+					childs[i].style.top=top+"px";
+					wArr.push(left);
+					hArr.push(top+margin+childs[i].offsetHeight);
+				}else{
+					var minTop=Math.min.apply(null,hArr);			//取出最小的列高度
+					var index=minIndex(minTop);						//匹配最小列高度所在列数
+					childs[i].style.left=wArr[index]+"px";			//根据所在列对齐第一行
+					childs[i].style.top=hArr[index]+"px"; 			//当前图片块紧接着上一行的最小列高度之后
+					hArr[index]+=childs[i].offsetHeight+margin;		//更新当前列的列高度
+				}
 			}
-		}
-
-		oparent.style.width=columns*(w+margin)-margin+"px";		//设置父容器的宽度
-		oparent.style.height=Math.max.apply(null,hArr)+"px";	//设置父容器的高度
-		showload.style.width=oparent.style.width;
+			if(Math.max.apply(null,hArr)+parentOffsetTop-margin<=H||childs.length<=minColumns){
+				childs=getbycls(oparent,childscls);
+				hArr=[];
+				wArr=[];
+				var xmlhttp=window.XMLHttpRequest?new XMLHttpRequest:new ActiveXObject("Microsoft.XMLHTTP");
+				xmlhttp.open("POST",method,true);
+				xmlhttp.onreadystatechange=function(){
+					if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+						ajaxcallbak(JSON.parse(xmlhttp.responseText),oparent);	//根据回掉函数处理ajax返回的数据
+						calculation();
+					}
+				}
+				xmlhttp.send(ajaxPOST);
+			}
+			oparent.style.width=columns*(w+margin)-margin+"px";		//设置父容器的宽度
+			oparent.style.height=Math.max.apply(null,hArr)+"px";	//设置父容器的高度
+			showload.style.width=oparent.style.width;
+		}();
 	}
 
 	//下拉加载图片
